@@ -1,0 +1,45 @@
+============================================================
+DANH SÁCH TÀI KHOẢN KIỂM THỬ (TEST ACCOUNTS)
+============================================================
+
+A. NHÓM NHÂN VIÊN & QUẢN TRỊ (EMPLOYEES)
+(Mật khẩu: 123)
+------------------------------------------------------------
+1. Quản trị viên (Admin - RoleId: 1)
+   - Username: admin
+   - Trạng thái: Hoạt động (Active)
+   - Mục đích test: Kiểm tra toàn quyền hệ thống.
+
+2. Lễ tân 1 (Receptionist - RoleId: 2)
+   - Username: staff1
+   - Trạng thái: Hoạt động (Active)
+   - Mục đích test: Kiểm tra chức năng dành cho nhân viên (đặt phòng, check-in...).
+
+3. Lễ tân 2 (Receptionist - RoleId: 2)
+   - Username: staff2
+   - Trạng thái: Đã nghỉ việc (IsActive = 0)
+   - Mục đích test: Đăng nhập PHẢI THẤT BẠI (tài khoản bị vô hiệu hóa).
+
+
+B. NHÓM KHÁCH HÀNG (GUESTS)
+(Mật khẩu: 123)
+------------------------------------------------------------
+1. Khách hàng Nam
+   - Username: guest
+   - Tên: Nguyen Van An
+   - Trạng thái: Hoạt động (Active)
+   - Mục đích test: Đặt phòng thành công.
+
+2. Khách hàng Nữ
+   - Username: guest2
+   - Tên: Tran Thi Bich
+   - Trạng thái: Hoạt động (Active)
+   - Mục đích test: Đặt phòng thành công, kiểm tra hiển thị thông tin nữ.
+
+3. Khách hàng bị cấm
+   - Username: guest_ban
+   - Tên: Le Van Cuong
+   - Trạng thái: Bị khóa (IsActive = 0)
+   - Mục đích test: Đăng nhập PHẢI THẤT BẠI (tài khoản bị khóa).
+
+============================================================

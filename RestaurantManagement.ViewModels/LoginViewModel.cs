@@ -1,0 +1,142 @@
+using System.Windows.Input;
+using RestaurantManagement.Commands;
+using RestaurantManagement.Services;
+
+namespace RestaurantManagement.ViewModels;
+
+public class LoginViewModel : ViewModelBase
+{
+    private readonly IAccountService _accountService;
+    private readonly IUserSession _userSession;
+    private string _username = string.Empty;
+    private string _password = string.Empty;
+    private string? _errorMessage;
+    private bool _isBusy;
+
+    public LoginViewModel(IAccountService accountService, IUserSession userSession)
+    {
+        _accountService = accountService;
+        _userSession = userSession;
+        LoginCommand = new AsyncRelayCommand(LoginAsync, CanLogin);
+    }
+
+    public event EventHandler<AccountMember>? LoginSucceeded;
+
+    public string Username
+    {
+        get => _username;
+        set
+        {
+            var trimmedStartUsername = value.TrimStart();
+            if (SetProperty(ref _username, trimmedStartUsername))
+            {
+                ErrorMessage = null;
+                RaiseLoginCanExecuteChanged();
+            }
+        }
+    }
+
+    public string Password
+    {
+        get => _password;
+        set
+        {
+            if (SetProperty(ref _password, value))
+            {
+                ErrorMessage = null;
+                RaiseLoginCanExecuteChanged();
+            }
+        }
+    }
+
+    public string? ErrorMessage
+    {
+        get => _errorMessage;
+        private set => SetProperty(ref _errorMessage, value);
+    }
+
+    public bool IsBusy
+    {
+        get => _isBusy;
+        private set
+        {
+            if (SetProperty(ref _isBusy, value))
+            {
+                RaiseLoginCanExecuteChanged();
+            }
+        }
+    }
+
+    public ICommand LoginCommand { get; }
+
+    private bool CanLogin()
+        => !IsBusy;
+
+    private async Task LoginAsync()
+    {
+        try
+        {
+            IsBusy = true;
+            ErrorMessage = null;
+
+            var inputError = ValidateInput();
+            if (inputError is not null)
+            {
+                ErrorMessage = inputError;
+                return;
+            }
+
+            var loginResult = await _accountService.LoginAsync(Username, Password);
+            if (!loginResult.IsSuccess || loginResult.AccountMember is null)
+            {
+                ErrorMessage = loginResult.ErrorMessage;
+                return;
+            }
+
+            _userSession.SignIn(loginResult.AccountMember);
+            Password = string.Empty;
+            LoginSucceeded?.Invoke(this, loginResult.AccountMember);
+        }
+        catch (Exception)
+        {
+            ErrorMessage = "Unable to login right now. Please check the database connection and try again.";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private string? ValidateInput()
+    {
+        if (string.IsNullOrWhiteSpace(Username))
+        {
+            return "Please enter username.";
+        }
+
+        if (string.IsNullOrWhiteSpace(Password))
+        {
+            return "Please enter password.";
+        }
+
+        if (Username.Trim().Length > LoginValidationRules.MaxUsernameLength)
+        {
+            return $"Username cannot exceed {LoginValidationRules.MaxUsernameLength} characters.";
+        }
+
+        if (Password.Length > LoginValidationRules.MaxPasswordLength)
+        {
+            return $"Password cannot exceed {LoginValidationRules.MaxPasswordLength} characters.";
+        }
+
+        return null;
+    }
+
+    private void RaiseLoginCanExecuteChanged()
+    {
+        if (LoginCommand is AsyncRelayCommand command)
+        {
+            command.RaiseCanExecuteChanged();
+        }
+    }
+}

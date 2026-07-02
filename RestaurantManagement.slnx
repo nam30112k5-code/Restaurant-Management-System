@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="RestaurantManagement.Commands/RestaurantManagement.Commands.csproj" />
+  <Project Path="RestaurantManagement.Data/RestaurantManagement.Data.csproj" />
+  <Project Path="RestaurantManagement.Helpers/RestaurantManagement.Helpers.csproj" />
+  <Project Path="RestaurantManagement.Models/RestaurantManagement.Models.csproj" />
+  <Project Path="RestaurantManagement.Services/RestaurantManagement.Services.csproj" />
+  <Project Path="RestaurantManagement.UI/RestaurantManagement.UI.csproj" />
+  <Project Path="RestaurantManagement.ViewModels/RestaurantManagement.ViewModels.csproj" />
+</Solution>

@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\RestaurantManagement.ViewModels\RestaurantManagement.ViewModels.csproj" />
+    <ProjectReference Include="..\RestaurantManagement.Services\RestaurantManagement.Services.csproj" />
+    <ProjectReference Include="..\RestaurantManagement.Data\RestaurantManagement.Data.csproj" />
+    <ProjectReference Include="..\RestaurantManagement.Models\RestaurantManagement.Models.csproj" />
+    <ProjectReference Include="..\RestaurantManagement.Helpers\RestaurantManagement.Helpers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+</Project>
