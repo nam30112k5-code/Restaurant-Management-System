@@ -8,10 +8,10 @@
         xmlns:viewModels="clr-namespace:RestaurantManagement.ViewModels;assembly=RestaurantManagement.ViewModels"
         mc:Ignorable="d"
         Title="Restaurant Management"
-        Height="720"
-        MinHeight="620"
-        Width="1120"
-        MinWidth="920"
+        Height="760"
+        MinHeight="680"
+        Width="1240"
+        MinWidth="1080"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource PageBackgroundBrush}">
     <Window.Resources>
@@ -31,8 +31,8 @@
                         ClipToBounds="True">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#6F3F2A" Offset="0" />
-                            <GradientStop Color="#2E7D6B" Offset="1" />
+                            <GradientStop Color="#0F172A" Offset="0" />
+                            <GradientStop Color="#0F766E" Offset="1" />
                         </LinearGradientBrush>
                     </Border.Background>
                     <Grid Margin="56">
@@ -44,7 +44,7 @@
                                     HorizontalAlignment="Left"
                                     Margin="0,0,0,26">
                                 <TextBlock Text="Desktop Reservation System"
-                                           Foreground="#F8EFE8"
+                                           Foreground="#E0F2FE"
                                            FontSize="13"
                                            FontWeight="SemiBold" />
                             </Border>
@@ -53,7 +53,7 @@
                                        FontSize="42"
                                        FontWeight="SemiBold" />
                             <TextBlock Text="Manage bookings, table status, customers, feedback, and staff operations from one clean workspace."
-                                       Foreground="#F0DED1"
+                                       Foreground="#DBEAFE"
                                        FontSize="18"
                                        TextWrapping="Wrap"
                                        LineHeight="28"
@@ -67,7 +67,7 @@
                                                FontSize="18"
                                                FontWeight="SemiBold" />
                                     <TextBlock Text="Control"
-                                               Foreground="#E7D8CE"
+                                               Foreground="#BFDBFE"
                                                FontSize="13" />
                                 </StackPanel>
                                 <StackPanel>
@@ -76,7 +76,7 @@
                                                FontSize="18"
                                                FontWeight="SemiBold" />
                                     <TextBlock Text="Booking"
-                                               Foreground="#E7D8CE"
+                                               Foreground="#BFDBFE"
                                                FontSize="13" />
                                 </StackPanel>
                                 <StackPanel>
@@ -85,7 +85,7 @@
                                                FontSize="18"
                                                FontWeight="SemiBold" />
                                     <TextBlock Text="History"
-                                               Foreground="#E7D8CE"
+                                               Foreground="#BFDBFE"
                                                FontSize="13" />
                                 </StackPanel>
                             </UniformGrid>
@@ -181,9 +181,9 @@
 
                 <Border Padding="22">
                     <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#5B3828" Offset="0" />
-                            <GradientStop Color="#244F47" Offset="1" />
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#0F172A" Offset="0" />
+                            <GradientStop Color="#111827" Offset="1" />
                         </LinearGradientBrush>
                     </Border.Background>
                     <DockPanel LastChildFill="True">
@@ -194,7 +194,7 @@
                                     HorizontalAlignment="Left"
                                     Margin="0,0,0,16">
                                 <TextBlock Text="RMS Desktop"
-                                           Foreground="#F8EFE8"
+                                           Foreground="#E0F2FE"
                                            FontSize="12"
                                            FontWeight="SemiBold" />
                             </Border>
@@ -203,7 +203,7 @@
                                        FontSize="28"
                                        FontWeight="SemiBold" />
                             <TextBlock Text="{Binding WelcomeText}"
-                                       Foreground="#EBDCD1"
+                                       Foreground="#CBD5E1"
                                        TextWrapping="Wrap"
                                        Margin="0,8,0,28" />
                         </StackPanel>
@@ -211,6 +211,8 @@
                         <Button DockPanel.Dock="Bottom"
                                 Content="Logout"
                                 Command="{Binding LogoutCommand}"
+                                Style="{StaticResource SidebarButtonStyle}"
+                                Background="#334155"
                                 Margin="0,20,0,0" />
 
                         <ItemsControl ItemsSource="{Binding MenuItems}">
@@ -219,10 +221,7 @@
                                     <Button Content="{Binding}"
                                             Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}"
-                                            Margin="0,0,0,10"
-                                            HorizontalContentAlignment="Left"
-                                            Padding="14,0"
-                                            Background="#33FFFFFF" />
+                                            Style="{StaticResource SidebarButtonStyle}" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -236,8 +235,8 @@
                     </Grid.RowDefinitions>
 
                     <Border Background="{StaticResource SurfaceBrush}"
-                            CornerRadius="14"
-                            Padding="22,18"
+                            CornerRadius="16"
+                            Padding="24,20"
                             Margin="0,0,0,18">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="18"
@@ -248,7 +247,7 @@
                         <DockPanel>
                             <StackPanel>
                                 <TextBlock Text="{Binding SelectedMenuItem}"
-                                           FontSize="30"
+                                           FontSize="32"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource TextBrush}" />
                                 <TextBlock Text="Manage restaurant operations with role-based tools."
@@ -264,33 +263,33 @@
                         </DockPanel>
                     </Border>
 
-                    <ScrollViewer Grid.Row="1"
-                                  VerticalScrollBarVisibility="Auto">
+                    <Border Grid.Row="1"
+                            Background="{StaticResource SurfaceBrush}"
+                            CornerRadius="16"
+                            Padding="22">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="18"
+                                              ShadowDepth="5"
+                                              Opacity="0.08"
+                                              Color="#334155" />
+                        </Border.Effect>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <Grid>
                             <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Dashboard}">
                                 <UniformGrid Columns="3">
-                                    <Border Background="White" Padding="26" Margin="0,0,16,0" CornerRadius="14">
-                                        <Border.Effect>
-                                            <DropShadowEffect BlurRadius="16" ShadowDepth="3" Opacity="0.08" />
-                                        </Border.Effect>
+                                    <Border Style="{StaticResource MetricCardStyle}">
                                         <StackPanel>
                                             <TextBlock Text="Employees" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
                                             <TextBlock Text="{Binding Employees.Count}" FontSize="34" FontWeight="SemiBold" />
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="White" Padding="26" Margin="0,0,16,0" CornerRadius="14">
-                                        <Border.Effect>
-                                            <DropShadowEffect BlurRadius="16" ShadowDepth="3" Opacity="0.08" />
-                                        </Border.Effect>
+                                    <Border Style="{StaticResource MetricCardStyle}">
                                         <StackPanel>
                                             <TextBlock Text="Bookings" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
                                             <TextBlock Text="{Binding Appointments.Count}" FontSize="34" FontWeight="SemiBold" />
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="White" Padding="26" CornerRadius="14">
-                                        <Border.Effect>
-                                            <DropShadowEffect BlurRadius="16" ShadowDepth="3" Opacity="0.08" />
-                                        </Border.Effect>
+                                    <Border Style="{StaticResource MetricCardStyle}" Margin="0">
                                         <StackPanel>
                                             <TextBlock Text="Feedbacks" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
                                             <TextBlock Text="{Binding Feedbacks.Count}" FontSize="34" FontWeight="SemiBold" />
@@ -330,8 +329,8 @@
                                     <TextBox Text="{Binding EmployeeRoleId, UpdateSourceTrigger=PropertyChanged}" />
                                     <CheckBox Content="Active" IsChecked="{Binding EmployeeIsActive}" Margin="0,12,0,12" />
                                     <Button Content="Save" Command="{Binding SaveEmployeeCommand}" Margin="0,0,0,8" />
-                                    <Button Content="New" Command="{Binding NewEmployeeCommand}" Margin="0,0,0,8" />
-                                    <Button Content="Delete" Command="{Binding DeleteEmployeeCommand}" />
+                                    <Button Content="New" Command="{Binding NewEmployeeCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
+                                    <Button Content="Delete" Command="{Binding DeleteEmployeeCommand}" Style="{StaticResource DangerButtonStyle}" />
                                 </StackPanel>
                             </Grid>
 
@@ -363,9 +362,9 @@
                                     <TextBlock Text="Phone" Margin="0,10,0,0" />
                                     <TextBox Text="{Binding GuestPhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Content="Create" Command="{Binding SaveGuestCommand}" Margin="0,16,0,8" />
-                                    <Button Content="Block / Active" Command="{Binding ToggleGuestStatusCommand}" Margin="0,0,0,8" />
-                                    <Button Content="Reset Password" Command="{Binding ResetGuestPasswordCommand}" Margin="0,0,0,8" />
-                                    <Button Content="Delete" Command="{Binding DeleteGuestCommand}" />
+                                    <Button Content="Block / Active" Command="{Binding ToggleGuestStatusCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
+                                    <Button Content="Reset Password" Command="{Binding ResetGuestPasswordCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
+                                    <Button Content="Delete" Command="{Binding DeleteGuestCommand}" Style="{StaticResource DangerButtonStyle}" />
                                 </StackPanel>
                             </Grid>
 
@@ -384,8 +383,8 @@
                                     <TextBlock Text="Table Name" />
                                     <TextBox Text="{Binding TableName, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Content="Save" Command="{Binding SaveTableCommand}" Margin="0,16,0,8" />
-                                    <Button Content="New" Command="{Binding NewTableCommand}" Margin="0,0,0,8" />
-                                    <Button Content="Delete" Command="{Binding DeleteTableCommand}" />
+                                    <Button Content="New" Command="{Binding NewTableCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
+                                    <Button Content="Delete" Command="{Binding DeleteTableCommand}" Style="{StaticResource DangerButtonStyle}" />
                                 </StackPanel>
                             </Grid>
 
@@ -403,8 +402,8 @@
                                     </DataGrid>
                                     <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                                         <Button Content="Confirm" Command="{Binding ConfirmBookingCommand}" Width="120" Margin="0,0,8,0" />
-                                        <Button Content="Cancel" Command="{Binding CancelBookingCommand}" Width="120" Margin="0,0,8,0" />
-                                        <Button Content="Complete" Command="{Binding CompleteBookingCommand}" Width="120" />
+                                        <Button Content="Cancel" Command="{Binding CancelBookingCommand}" Style="{StaticResource DangerButtonStyle}" Width="120" Margin="0,0,8,0" />
+                                        <Button Content="Complete" Command="{Binding CompleteBookingCommand}" Style="{StaticResource SecondaryButtonStyle}" Width="120" />
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
@@ -442,7 +441,7 @@
                                         <TextBox Text="{Binding StartTimeText}" Width="110" />
                                         <TextBox Text="{Binding EndTimeText}" Width="110" Margin="8,0,0,0" />
                                     </StackPanel>
-                                    <Button Content="Refresh Tables" Command="{Binding RefreshTableStatusCommand}" Margin="0,12,0,18" />
+                                    <Button Content="Refresh Tables" Command="{Binding RefreshTableStatusCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,12,0,18" />
                                     <TextBlock Text="Walk-in Guest" FontWeight="SemiBold" />
                                     <TextBox Text="{Binding WalkInGuestName, UpdateSourceTrigger=PropertyChanged}" Margin="0,6,0,8" />
                                     <TextBox Text="{Binding WalkInGuestPhone, UpdateSourceTrigger=PropertyChanged}" />
@@ -456,7 +455,7 @@
                                         <DatePicker SelectedDate="{Binding SelectedDate}" Width="160" />
                                         <TextBox Text="{Binding StartTimeText}" Width="110" Margin="8,0,0,0" />
                                         <TextBox Text="{Binding EndTimeText}" Width="110" Margin="8,0,0,0" />
-                                        <Button Content="Refresh" Command="{Binding RefreshTableStatusCommand}" Width="120" Margin="8,0,0,0" />
+                                        <Button Content="Refresh" Command="{Binding RefreshTableStatusCommand}" Style="{StaticResource SecondaryButtonStyle}" Width="120" Margin="8,0,0,0" />
                                     </StackPanel>
                                     <DataGrid ItemsSource="{Binding TableStatuses}" AutoGenerateColumns="False" IsReadOnly="True">
                                         <DataGrid.Columns>
@@ -487,7 +486,7 @@
                                         <TextBox Text="{Binding StartTimeText}" Width="110" />
                                         <TextBox Text="{Binding EndTimeText}" Width="110" Margin="8,0,0,0" />
                                     </StackPanel>
-                                    <Button Content="Find Tables" Command="{Binding RefreshTableStatusCommand}" Margin="0,12,0,8" />
+                                    <Button Content="Find Tables" Command="{Binding RefreshTableStatusCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,12,0,8" />
                                     <Button Content="Book Selected Table" Command="{Binding CreateCustomerBookingCommand}" />
                                 </StackPanel>
                             </Grid>
@@ -503,7 +502,7 @@
                                             <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
                                         </DataGrid.Columns>
                                     </DataGrid>
-                                    <Button Content="Cancel Selected Booking" Command="{Binding CancelHistoryBookingCommand}" Width="190" Margin="0,14,0,0" />
+                                    <Button Content="Cancel Selected Booking" Command="{Binding CancelHistoryBookingCommand}" Style="{StaticResource DangerButtonStyle}" Width="190" Margin="0,14,0,0" />
                                 </StackPanel>
                             </Grid>
 
@@ -552,7 +551,8 @@
                                 </StackPanel>
                             </Grid>
                         </Grid>
-                    </ScrollViewer>
+                        </ScrollViewer>
+                    </Border>
                 </Grid>
             </Grid>
         </DataTemplate>
