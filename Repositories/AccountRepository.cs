@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-using RestaurantManagement.Data;
-using RestaurantManagement.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Data;
+using Models;
 
 namespace Repositories;
 

@@ -1,4 +1,4 @@
-using RestaurantManagement.Models;
+﻿using Models;
 
 namespace Repositories;
 

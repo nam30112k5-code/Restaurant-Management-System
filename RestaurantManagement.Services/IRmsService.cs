@@ -1,6 +1,6 @@
-using RestaurantManagement.Models;
+﻿using Models;
 
-namespace RestaurantManagement.Services;
+namespace Services;
 
 public interface IRmsService
 {

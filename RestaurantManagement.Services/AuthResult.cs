@@ -1,4 +1,4 @@
-namespace RestaurantManagement.Services;
+﻿namespace Services;
 
 public sealed record AuthResult(
     bool IsSuccess,

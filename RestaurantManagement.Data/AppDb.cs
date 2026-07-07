@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using RestaurantManagement.Models;
+using Models;
 using System.IO;
 
-namespace RestaurantManagement.Data;
+namespace Data;
 
 public partial class AppDb : DbContext
 {

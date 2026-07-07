@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using RestaurantManagement.Data;
-using RestaurantManagement.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Data;
+using Models;
 
-namespace RestaurantManagement.Services;
+namespace Services;
 
 public class RmsService : IRmsService
 {

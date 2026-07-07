@@ -1,8 +1,8 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace RestaurantManagement.UI;
+namespace UI;
 
 public class MatchVisibilityConverter : IValueConverter
 {

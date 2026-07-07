@@ -1,4 +1,4 @@
-namespace RestaurantManagement.Models;
+﻿namespace Models;
 
 public class Table
 {

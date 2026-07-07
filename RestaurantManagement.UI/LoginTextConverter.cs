@@ -1,7 +1,7 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
 
-namespace RestaurantManagement.UI;
+namespace UI;
 
 public class LoginTextConverter : IValueConverter
 {

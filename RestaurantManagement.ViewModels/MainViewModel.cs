@@ -1,6 +1,6 @@
-using RestaurantManagement.Services;
+﻿using Services;
 
-namespace RestaurantManagement.ViewModels;
+namespace ViewModels;
 
 public class MainViewModel : ViewModelBase
 {

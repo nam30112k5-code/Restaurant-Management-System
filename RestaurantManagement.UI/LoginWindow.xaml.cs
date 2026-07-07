@@ -1,7 +1,7 @@
-using System.Windows;
-using RestaurantManagement.ViewModels;
+﻿using System.Windows;
+using ViewModels;
 
-namespace RestaurantManagement.UI;
+namespace UI;
 
 public partial class LoginWindow : Window
 {

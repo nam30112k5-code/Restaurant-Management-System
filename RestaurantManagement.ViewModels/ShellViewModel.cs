@@ -1,15 +1,15 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using RestaurantManagement.Commands;
-using RestaurantManagement.Models;
-using RestaurantManagement.Services;
+using Commands;
+using Models;
+using Services;
 
-namespace RestaurantManagement.ViewModels;
+namespace ViewModels;
 
 public class ShellViewModel : ViewModelBase
 {
-    private readonly IRmsService _restaurantService;
-    private readonly IUserSession _userSession;
+    private readonly IRmsService _service;
+    private readonly IUserSession _session;
     private string _selectedMenuItem = "Dashboard";
     private string? _message;
     private Employee? _selectedEmployee;
@@ -20,11 +20,12 @@ public class ShellViewModel : ViewModelBase
     private DateTime _selectedDate = DateTime.Today;
     private string _startTimeText = "18:00";
     private string _endTimeText = "20:00";
+    private string _selectedDishesText = "No dishes selected.";
 
-    public ShellViewModel(IRmsService restaurantService, IUserSession userSession)
+    public ShellViewModel(IRmsService service, IUserSession session)
     {
-        _restaurantService = restaurantService;
-        _userSession = userSession;
+        _service = service;
+        _session = session;
 
         MenuItems = new ObservableCollection<string>();
         Employees = new ObservableCollection<Employee>();
@@ -32,10 +33,18 @@ public class ShellViewModel : ViewModelBase
         Tables = new ObservableCollection<Table>();
         TableStatuses = new ObservableCollection<TableStatus>();
         Appointments = new ObservableCollection<Appointment>();
+        PendingBookings = new ObservableCollection<Appointment>();
         BookingHistory = new ObservableCollection<Appointment>();
         Feedbacks = new ObservableCollection<Feedback>();
+        Dishes = new ObservableCollection<Dish>(CreateDishes());
+        foreach (var dish in Dishes)
+        {
+            dish.PropertyChanged += (_, _) => UpdateSelectedDishesText();
+        }
+        UpdateSelectedDishesText();
 
         NavigateCommand = new AsyncRelayCommand(NavigateAsync);
+        ContinueToBookingCommand = new AsyncRelayCommand(ContinueToBookingAsync);
         LogoutCommand = new AsyncRelayCommand(LogoutAsync);
         SaveEmployeeCommand = new AsyncRelayCommand(SaveEmployeeAsync);
         DeleteEmployeeCommand = new AsyncRelayCommand(DeleteEmployeeAsync);
@@ -62,7 +71,7 @@ public class ShellViewModel : ViewModelBase
 
     public event EventHandler? LogoutRequested;
 
-    public UserAccount? CurrentAccount => _userSession.CurrentUser;
+    public UserAccount? CurrentAccount => _session.CurrentUser;
     public string WelcomeText => CurrentAccount is null ? "Welcome" : $"Welcome, {CurrentAccount.DisplayName}";
     public bool IsAdmin => CurrentAccount?.AccountType == AccountType.Employee && CurrentAccount.RoleId == RoleIds.Admin;
     public bool IsStaff => CurrentAccount?.AccountType == AccountType.Employee && CurrentAccount.RoleId == RoleIds.Staff;
@@ -74,10 +83,13 @@ public class ShellViewModel : ViewModelBase
     public ObservableCollection<Table> Tables { get; }
     public ObservableCollection<TableStatus> TableStatuses { get; }
     public ObservableCollection<Appointment> Appointments { get; }
+    public ObservableCollection<Appointment> PendingBookings { get; }
     public ObservableCollection<Appointment> BookingHistory { get; }
     public ObservableCollection<Feedback> Feedbacks { get; }
+    public ObservableCollection<Dish> Dishes { get; }
 
     public ICommand NavigateCommand { get; }
+    public ICommand ContinueToBookingCommand { get; }
     public ICommand LogoutCommand { get; }
     public ICommand SaveEmployeeCommand { get; }
     public ICommand DeleteEmployeeCommand { get; }
@@ -129,7 +141,7 @@ public class ShellViewModel : ViewModelBase
                     EmployeeGender = value.Gender ?? "male";
                     EmployeeRoleId = value.RoleId ?? RoleIds.Staff;
                     EmployeeIsActive = value.IsActive;
-                    RaiseFormProperties();
+                    RaiseEmployeeProperties();
                 }
             }
         }
@@ -226,12 +238,18 @@ public class ShellViewModel : ViewModelBase
     public string OldPassword { get; set; } = string.Empty;
     public string NewPassword { get; set; } = string.Empty;
 
+    public string SelectedDishesText
+    {
+        get => _selectedDishesText;
+        private set => SetProperty(ref _selectedDishesText, value);
+    }
+
     public async Task InitializeAsync()
     {
         MenuItems.Clear();
         if (IsAdmin)
         {
-            AddMenu("Dashboard", "Employees", "Customers", "Tables", "Bookings", "Feedbacks", "Profile", "Change Password");
+            AddMenu("Dashboard", "Bookings", "Table Status", "Employees", "Customers", "Tables", "Feedbacks", "Profile", "Change Password");
         }
         else if (IsStaff)
         {
@@ -239,7 +257,7 @@ public class ShellViewModel : ViewModelBase
         }
         else
         {
-            AddMenu("Customer Booking", "Booking History", "Feedback", "Profile", "Change Password");
+            AddMenu("Menu", "Customer Booking", "Booking History", "Feedback", "Profile", "Change Password");
         }
 
         SelectedMenuItem = MenuItems.FirstOrDefault() ?? "Dashboard";
@@ -285,6 +303,9 @@ public class ShellViewModel : ViewModelBase
             case "Bookings":
                 await LoadAppointmentsAsync();
                 break;
+            case "Menu":
+                UpdateSelectedDishesText();
+                break;
             case "Booking History":
             case "Feedback":
                 await LoadBookingHistoryAsync();
@@ -303,23 +324,43 @@ public class ShellViewModel : ViewModelBase
 
     private async Task LoadDashboardAsync()
     {
-        Employees.ReplaceWith(await _restaurantService.GetEmployeesAsync());
-        Guests.ReplaceWith(await _restaurantService.GetGuestsAsync());
-        Tables.ReplaceWith(await _restaurantService.GetTablesAsync());
-        Appointments.ReplaceWith(await _restaurantService.GetAppointmentsAsync());
-        Feedbacks.ReplaceWith(await _restaurantService.GetFeedbacksAsync());
+        Employees.ReplaceWith(await _service.GetEmployeesAsync());
+        Guests.ReplaceWith(await _service.GetGuestsAsync());
+        Tables.ReplaceWith(await _service.GetTablesAsync());
+        Appointments.ReplaceWith(await _service.GetAppointmentsAsync());
+        Feedbacks.ReplaceWith(await _service.GetFeedbacksAsync());
+        if (TryParseTimes(out var startTime, out var endTime))
+        {
+            TableStatuses.ReplaceWith(await _service.GetTableStatusAsync(SelectedDate, startTime, endTime));
+        }
+
+        RefreshAdminDashboard();
     }
 
     private async Task LogoutAsync()
     {
-        _userSession.SignOut();
+        _session.SignOut();
         LogoutRequested?.Invoke(this, EventArgs.Empty);
         await Task.CompletedTask;
     }
 
+    private async Task ContinueToBookingAsync()
+    {
+        UpdateSelectedDishesText();
+        if (!Dishes.Any(dish => dish.IsSelected))
+        {
+            Message = "Please choose at least one dish before booking a table.";
+            return;
+        }
+
+        SelectedMenuItem = "Customer Booking";
+        await LoadCurrentSectionAsync();
+        Message = "Dishes selected. Now choose your table and time.";
+    }
+
     private async Task LoadEmployeesAsync()
     {
-        Employees.ReplaceWith(await _restaurantService.GetEmployeesAsync());
+        Employees.ReplaceWith(await _service.GetEmployeesAsync());
     }
 
     private async Task SaveEmployeeAsync()
@@ -340,11 +381,11 @@ public class ShellViewModel : ViewModelBase
 
             if (employee.EmployeeId == 0)
             {
-                await _restaurantService.AddEmployeeAsync(employee, EmployeePassword);
+                await _service.AddEmployeeAsync(employee, EmployeePassword);
             }
             else
             {
-                await _restaurantService.UpdateEmployeeAsync(employee);
+                await _service.UpdateEmployeeAsync(employee);
             }
 
             await LoadEmployeesAsync();
@@ -362,7 +403,7 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            await _restaurantService.DeleteEmployeeAsync(SelectedEmployee.EmployeeId);
+            await _service.DeleteEmployeeAsync(SelectedEmployee.EmployeeId);
             await LoadEmployeesAsync();
             Message = "Deleted employee successfully.";
         });
@@ -379,13 +420,13 @@ public class ShellViewModel : ViewModelBase
         EmployeeGender = "male";
         EmployeeRoleId = RoleIds.Staff;
         EmployeeIsActive = true;
-        RaiseFormProperties();
+        RaiseEmployeeProperties();
         await Task.CompletedTask;
     }
 
     private async Task LoadGuestsAsync()
     {
-        Guests.ReplaceWith(await _restaurantService.GetGuestsAsync());
+        Guests.ReplaceWith(await _service.GetGuestsAsync());
     }
 
     private async Task SaveGuestAsync()
@@ -405,12 +446,12 @@ public class ShellViewModel : ViewModelBase
 
             if (guest.GuestId == 0)
             {
-                await _restaurantService.AddGuestAsync(guest, GuestPassword);
+                await _service.AddGuestAsync(guest, GuestPassword);
                 Message = "Created customer successfully.";
             }
             else
             {
-                await _restaurantService.UpdateGuestAsync(guest);
+                await _service.UpdateGuestAsync(guest);
                 Message = "Updated customer successfully.";
             }
 
@@ -442,7 +483,7 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            await _restaurantService.SetGuestStatusAsync(SelectedGuest.GuestId, !SelectedGuest.IsActive);
+            await _service.SetGuestStatusAsync(SelectedGuest.GuestId, !SelectedGuest.IsActive);
             await LoadGuestsAsync();
             Message = "Updated customer status.";
         });
@@ -458,7 +499,7 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            await _restaurantService.DeleteGuestAsync(SelectedGuest.GuestId);
+            await _service.DeleteGuestAsync(SelectedGuest.GuestId);
             await LoadGuestsAsync();
             Message = "Deleted customer successfully.";
         });
@@ -474,14 +515,14 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            await _restaurantService.ResetGuestPasswordAsync(SelectedGuest.GuestId, GuestPassword);
+            await _service.ResetGuestPasswordAsync(SelectedGuest.GuestId, GuestPassword);
             Message = "Reset password successfully.";
         });
     }
 
     private async Task LoadTablesAsync()
     {
-        Tables.ReplaceWith(await _restaurantService.GetTablesAsync());
+        Tables.ReplaceWith(await _service.GetTablesAsync());
     }
 
     private async Task SaveTableAsync()
@@ -490,12 +531,12 @@ public class ShellViewModel : ViewModelBase
         {
             if (SelectedTable is null)
             {
-                await _restaurantService.AddTableAsync(TableName);
+                await _service.AddTableAsync(TableName);
             }
             else
             {
                 SelectedTable.TableName = TableName;
-                await _restaurantService.UpdateTableAsync(SelectedTable);
+                await _service.UpdateTableAsync(SelectedTable);
             }
 
             await LoadTablesAsync();
@@ -514,7 +555,7 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            await _restaurantService.DeleteTableAsync(SelectedTable.TableId);
+            await _service.DeleteTableAsync(SelectedTable.TableId);
             await LoadTablesAsync();
             await LoadTableStatusAsync();
             Message = "Deleted table successfully.";
@@ -536,7 +577,7 @@ public class ShellViewModel : ViewModelBase
             return;
         }
 
-        TableStatuses.ReplaceWith(await _restaurantService.GetTableStatusAsync(SelectedDate, startTime, endTime));
+        TableStatuses.ReplaceWith(await _service.GetTableStatusAsync(SelectedDate, startTime, endTime));
     }
 
     private async Task CreateWalkInBookingAsync()
@@ -555,8 +596,8 @@ public class ShellViewModel : ViewModelBase
                 return;
             }
 
-            var guestId = await _restaurantService.CreateOrGetWalkInGuestAsync(WalkInGuestName, WalkInGuestPhone);
-            await _restaurantService.CreateBookingAsync(guestId, tableId, SelectedDate, startTime, endTime, "confirmed", CurrentAccount?.Username);
+            var guestId = await _service.CreateOrGetWalkInGuestAsync(WalkInGuestName, WalkInGuestPhone);
+            await _service.CreateBookingAsync(guestId, tableId, SelectedDate, startTime, endTime, "confirmed", CurrentAccount?.Username);
             await LoadTableStatusAsync();
             Message = "Created walk-in booking successfully.";
         });
@@ -571,7 +612,14 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            if (await _restaurantService.HasPendingBookingAsync(CurrentAccount.Id))
+            if (!Dishes.Any(dish => dish.IsSelected))
+            {
+                SelectedMenuItem = "Menu";
+                Message = "Please choose dishes before booking a table.";
+                return;
+            }
+
+            if (await _service.HasPendingBookingAsync(CurrentAccount.Id))
             {
                 Message = "You already have a pending booking.";
                 return;
@@ -584,15 +632,16 @@ public class ShellViewModel : ViewModelBase
                 return;
             }
 
-            await _restaurantService.CreateBookingAsync(CurrentAccount.Id, tableId, SelectedDate, startTime, endTime, "pending", CurrentAccount.Username);
+            await _service.CreateBookingAsync(CurrentAccount.Id, tableId, SelectedDate, startTime, endTime, "pending", CurrentAccount.Username);
             await LoadBookingHistoryAsync();
-            Message = "Booking created. Please wait for confirmation.";
+            Message = $"Booking created with: {SelectedDishesText}. Please wait for confirmation.";
         });
     }
 
     private async Task LoadAppointmentsAsync()
     {
-        Appointments.ReplaceWith(await _restaurantService.GetAppointmentsAsync());
+        Appointments.ReplaceWith(await _service.GetAppointmentsAsync());
+        RefreshAdminDashboard();
     }
 
     private async Task UpdateSelectedBookingStatusAsync(string status)
@@ -605,7 +654,7 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            await _restaurantService.UpdateBookingStatusAsync(SelectedAppointment.AppointmentId, status);
+            await _service.UpdateBookingStatusAsync(SelectedAppointment.AppointmentId, status);
             await LoadAppointmentsAsync();
             Message = $"Booking marked as {status}.";
         });
@@ -618,7 +667,7 @@ public class ShellViewModel : ViewModelBase
             return;
         }
 
-        BookingHistory.ReplaceWith(await _restaurantService.GetBookingHistoryAsync(CurrentAccount.Id));
+        BookingHistory.ReplaceWith(await _service.GetBookingHistoryAsync(CurrentAccount.Id));
     }
 
     private async Task SubmitFeedbackAsync()
@@ -631,7 +680,7 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            await _restaurantService.AddFeedbackAsync(CurrentAccount.Id, SelectedHistory.AppointmentId, FeedbackContent, FeedbackRating);
+            await _service.AddFeedbackAsync(CurrentAccount.Id, SelectedHistory.AppointmentId, FeedbackContent, FeedbackRating);
             await LoadBookingHistoryAsync();
             Message = "Feedback submitted successfully.";
         });
@@ -653,7 +702,7 @@ public class ShellViewModel : ViewModelBase
                 return;
             }
 
-            await _restaurantService.CancelBookingAsync(SelectedHistory.AppointmentId);
+            await _service.CancelBookingAsync(SelectedHistory.AppointmentId);
             await LoadBookingHistoryAsync();
             Message = "Booking cancelled successfully.";
         });
@@ -661,7 +710,8 @@ public class ShellViewModel : ViewModelBase
 
     private async Task LoadFeedbacksAsync()
     {
-        Feedbacks.ReplaceWith(await _restaurantService.GetFeedbacksAsync());
+        Feedbacks.ReplaceWith(await _service.GetFeedbacksAsync());
+        RefreshAdminDashboard();
     }
 
     private async Task SaveProfileAsync()
@@ -673,7 +723,7 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            await _restaurantService.UpdateProfileAsync(CurrentAccount, GuestName, GuestIdentityNumber, GuestPhoneNumber, GuestDateOfBirth, GuestGender);
+            await _service.UpdateProfileAsync(CurrentAccount, GuestName, GuestIdentityNumber, GuestPhoneNumber, GuestDateOfBirth, GuestGender);
             Message = "Profile updated successfully.";
         });
     }
@@ -687,7 +737,7 @@ public class ShellViewModel : ViewModelBase
 
         if (CurrentAccount.AccountType == AccountType.Guest)
         {
-            var guest = await _restaurantService.GetGuestByIdAsync(CurrentAccount.Id);
+            var guest = await _service.GetGuestByIdAsync(CurrentAccount.Id);
             if (guest is null)
             {
                 return;
@@ -702,7 +752,7 @@ public class ShellViewModel : ViewModelBase
         }
         else
         {
-            var employee = await _restaurantService.GetEmployeeByIdAsync(CurrentAccount.Id);
+            var employee = await _service.GetEmployeeByIdAsync(CurrentAccount.Id);
             if (employee is null)
             {
                 return;
@@ -726,7 +776,7 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
-            var isChanged = await _restaurantService.ChangePasswordAsync(CurrentAccount, OldPassword, NewPassword);
+            var isChanged = await _service.ChangePasswordAsync(CurrentAccount, OldPassword, NewPassword);
             Message = isChanged ? "Password changed successfully." : "Old password is incorrect.";
         });
     }
@@ -764,7 +814,7 @@ public class ShellViewModel : ViewModelBase
         }
     }
 
-    private void RaiseFormProperties()
+    private void RaiseEmployeeProperties()
     {
         OnPropertyChanged(nameof(EmployeeUsername));
         OnPropertyChanged(nameof(EmployeePassword));
@@ -785,6 +835,42 @@ public class ShellViewModel : ViewModelBase
         OnPropertyChanged(nameof(GuestPhoneNumber));
         OnPropertyChanged(nameof(GuestDateOfBirth));
         OnPropertyChanged(nameof(GuestGender));
+    }
+
+    private void UpdateSelectedDishesText()
+    {
+        var selectedDishes = Dishes.Where(dish => dish.IsSelected).ToList();
+        if (selectedDishes.Count == 0)
+        {
+            SelectedDishesText = "No dishes selected.";
+            return;
+        }
+
+        var total = selectedDishes.Sum(dish => dish.Price);
+        SelectedDishesText = $"{string.Join(", ", selectedDishes.Select(dish => dish.Name))} - total {total:N0} d";
+    }
+
+    private void RefreshAdminDashboard()
+    {
+        PendingBookings.ReplaceWith(Appointments
+            .Where(appointment => appointment.Status == "pending")
+            .OrderBy(appointment => appointment.Date)
+            .ThenBy(appointment => appointment.StartTime)
+            .Take(8));
+    }
+
+    private static IEnumerable<Dish> CreateDishes()
+    {
+        yield return new Dish("Lobster Caesar", "Starter", "Fresh greens, grilled lobster, lemon dressing.", 75000);
+        yield return new Dish("Macadamia Salad", "Starter", "Lettuce, macadamia, olive oil.", 68000);
+        yield return new Dish("Beef Pho Rolls", "Main", "Soft beef, herbs, special dipping sauce.", 90000);
+        yield return new Dish("Banana Blossom Salad", "Main", "Crisp, light, sweet and sour balance.", 125000);
+        yield return new Dish("Pandan Chicken", "Main", "Grilled chicken with sesame sauce.", 168000);
+        yield return new Dish("Butter Prawn", "Seafood", "Large prawn, garlic butter, micro greens.", 245000);
+        yield return new Dish("Pan Seared Salmon", "Seafood", "Salmon, asparagus, green pepper sauce.", 220000);
+        yield return new Dish("Seafood Pasta", "Main", "Pasta, clam, shrimp, tomato sauce.", 155000);
+        yield return new Dish("Caramel Flan", "Dessert", "Smooth custard with rich caramel.", 45000);
+        yield return new Dish("Fruit Tea", "Drink", "Iced tea with seasonal fruit.", 39000);
     }
 }
 

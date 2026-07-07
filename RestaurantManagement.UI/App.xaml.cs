@@ -1,14 +1,14 @@
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RestaurantManagement.Data;
-using RestaurantManagement.Services;
-using RestaurantManagement.ViewModels;
+using Data;
+using Services;
+using ViewModels;
 using Repositories;
 
-namespace RestaurantManagement.UI;
+namespace UI;
 
 public partial class App : Application
 {

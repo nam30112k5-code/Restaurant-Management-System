@@ -1,7 +1,7 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace RestaurantManagement.Helpers;
+namespace Helpers;
 
 public static class PasswordHelper
 {

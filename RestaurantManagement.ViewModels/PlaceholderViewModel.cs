@@ -1,4 +1,4 @@
-namespace RestaurantManagement.ViewModels;
+﻿namespace ViewModels;
 
 public class PlaceholderViewModel : ViewModelBase
 {

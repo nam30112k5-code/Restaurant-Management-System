@@ -1,11 +1,11 @@
-<Window x:Class="RestaurantManagement.UI.LoginWindow"
+﻿<Window x:Class="UI.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:helpers="clr-namespace:RestaurantManagement.Helpers;assembly=RestaurantManagement.Helpers"
-        xmlns:local="clr-namespace:RestaurantManagement.UI"
+        xmlns:helpers="clr-namespace:Helpers;assembly=RestaurantManagement.Helpers"
+        xmlns:local="clr-namespace:UI"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:RestaurantManagement.ViewModels;assembly=RestaurantManagement.ViewModels"
+        xmlns:viewModels="clr-namespace:ViewModels;assembly=RestaurantManagement.ViewModels"
         mc:Ignorable="d"
         Title="Restaurant Management"
         Height="760"
@@ -27,33 +27,41 @@
                 </Grid.ColumnDefinitions>
 
                 <Border Margin="24"
-                        CornerRadius="18"
+                        CornerRadius="8"
                         ClipToBounds="True">
                     <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#0F172A" Offset="0" />
-                            <GradientStop Color="#0F766E" Offset="1" />
-                        </LinearGradientBrush>
+                        <ImageBrush ImageSource="Assets/restaurant-hero.png"
+                                    Stretch="UniformToFill" />
                     </Border.Background>
-                    <Grid Margin="56">
+                    <Grid>
+                        <Rectangle>
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#E6061714" Offset="0" />
+                                    <GradientStop Color="#B4073D35" Offset="0.58" />
+                                    <GradientStop Color="#30000000" Offset="1" />
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
                         <StackPanel VerticalAlignment="Center"
+                                    Margin="56"
                                     MaxWidth="520">
-                            <Border Background="#30FFFFFF"
-                                    CornerRadius="20"
+                            <Border Background="#33B7791F"
+                                    CornerRadius="8"
                                     Padding="14,7"
                                     HorizontalAlignment="Left"
                                     Margin="0,0,0,26">
-                                <TextBlock Text="Desktop Reservation System"
-                                           Foreground="#E0F2FE"
+                                <TextBlock Text="Dollar Restaurant"
+                                           Foreground="#FDECC8"
                                            FontSize="13"
                                            FontWeight="SemiBold" />
                             </Border>
-                            <TextBlock Text="Restaurant Management"
+                            <TextBlock Text="Dollar Restaurant"
                                        Foreground="White"
                                        FontSize="42"
                                        FontWeight="SemiBold" />
-                            <TextBlock Text="Manage bookings, table status, customers, feedback, and staff operations from one clean workspace."
-                                       Foreground="#DBEAFE"
+                            <TextBlock Text="Mon an da dang, khong gian am cung, dat ban nhanh va quan ly nha hang trong mot ung dung desktop."
+                                       Foreground="#D6E9E4"
                                        FontSize="18"
                                        TextWrapping="Wrap"
                                        LineHeight="28"
@@ -97,7 +105,7 @@
                     <Border Background="{StaticResource SurfaceBrush}"
                             Padding="42"
                             MaxWidth="430"
-                            CornerRadius="14"
+                            CornerRadius="8"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
                         <Border.Effect>
@@ -173,7 +181,25 @@
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type viewModels:ShellViewModel}">
-            <Grid Background="{StaticResource PageBackgroundBrush}">
+            <Grid Background="{StaticResource RestaurantBgBrush}">
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="#EAF7F3" />
+                        <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+                    </Style>
+                    <Style x:Key="SectionTitleTextStyle" TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="#FDECC8" />
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="Margin" Value="0,0,0,14" />
+                    </Style>
+                    <Style x:Key="FormLabelStyle" TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="#A8CCC4" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="FontSize" Value="12" />
+                        <Setter Property="Margin" Value="0,10,0,2" />
+                    </Style>
+                </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="268" />
                     <ColumnDefinition Width="*" />
@@ -182,19 +208,19 @@
                 <Border Padding="22">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop Color="#0F172A" Offset="0" />
-                            <GradientStop Color="#111827" Offset="1" />
+                            <GradientStop Color="#061D1A" Offset="0" />
+                            <GradientStop Color="#0A3E36" Offset="1" />
                         </LinearGradientBrush>
                     </Border.Background>
                     <DockPanel LastChildFill="True">
                         <StackPanel DockPanel.Dock="Top">
-                            <Border Background="#22FFFFFF"
-                                    CornerRadius="18"
+                            <Border Background="#2AB7791F"
+                                    CornerRadius="8"
                                     Padding="12,6"
                                     HorizontalAlignment="Left"
                                     Margin="0,0,0,16">
-                                <TextBlock Text="RMS Desktop"
-                                           Foreground="#E0F2FE"
+                                <TextBlock Text="Dollar Restaurant"
+                                           Foreground="#FDECC8"
                                            FontSize="12"
                                            FontWeight="SemiBold" />
                             </Border>
@@ -203,7 +229,7 @@
                                        FontSize="28"
                                        FontWeight="SemiBold" />
                             <TextBlock Text="{Binding WelcomeText}"
-                                       Foreground="#CBD5E1"
+                                       Foreground="#BEDBD3"
                                        TextWrapping="Wrap"
                                        Margin="0,8,0,28" />
                         </StackPanel>
@@ -212,7 +238,7 @@
                                 Content="Logout"
                                 Command="{Binding LogoutCommand}"
                                 Style="{StaticResource SidebarButtonStyle}"
-                                Background="#334155"
+                                Background="#8A2F2B"
                                 Margin="0,20,0,0" />
 
                         <ItemsControl ItemsSource="{Binding MenuItems}">
@@ -228,44 +254,42 @@
                     </DockPanel>
                 </Border>
 
-                <Grid Grid.Column="1" Margin="30">
+                <Grid Grid.Column="1" Margin="28">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Border Background="{StaticResource SurfaceBrush}"
-                            CornerRadius="16"
-                            Padding="24,20"
+                    <Border Background="#102F2A"
+                            BorderBrush="#2F6F63"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="24,18"
                             Margin="0,0,0,18">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="18"
-                                              ShadowDepth="4"
-                                              Opacity="0.08"
-                                              Color="#3A2C24" />
-                        </Border.Effect>
                         <DockPanel>
                             <StackPanel>
                                 <TextBlock Text="{Binding SelectedMenuItem}"
-                                           FontSize="32"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextBrush}" />
-                                <TextBlock Text="Manage restaurant operations with role-based tools."
-                                           Foreground="{StaticResource MutedTextBrush}"
+                                           Foreground="#FDECC8"
+                                           FontSize="28"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding WelcomeText}"
+                                           Foreground="#B8DAD2"
                                            Margin="0,4,0,0" />
                             </StackPanel>
-                        <TextBlock Text="{Binding Message}"
-                                   Foreground="{StaticResource PrimaryBrush}"
-                                   FontWeight="SemiBold"
-                                   HorizontalAlignment="Right"
-                                   TextWrapping="Wrap"
-                                   Margin="24,8,0,0" />
+                            <TextBlock Text="{Binding Message}"
+                                       Foreground="#F4C46D"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Right"
+                                       TextWrapping="Wrap"
+                                       Margin="24,8,0,0" />
                         </DockPanel>
                     </Border>
 
                     <Border Grid.Row="1"
-                            Background="{StaticResource SurfaceBrush}"
-                            CornerRadius="16"
+                            Background="#EC0B332D"
+                            BorderBrush="#275F54"
+                            BorderThickness="1"
+                            CornerRadius="8"
                             Padding="22">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="18"
@@ -276,40 +300,92 @@
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <Grid>
                             <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Dashboard}">
-                                <UniformGrid Columns="5">
-                                    <Border Style="{StaticResource MetricCardStyle}">
-                                        <StackPanel>
-                                            <TextBlock Text="Employees" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
-                                            <TextBlock Text="{Binding Employees.Count}" FontSize="34" FontWeight="SemiBold" />
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Style="{StaticResource MetricCardStyle}">
-                                        <StackPanel>
-                                            <TextBlock Text="Customers" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
-                                            <TextBlock Text="{Binding Guests.Count}" FontSize="34" FontWeight="SemiBold" />
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Style="{StaticResource MetricCardStyle}">
-                                        <StackPanel>
-                                            <TextBlock Text="Tables" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
-                                            <TextBlock Text="{Binding Tables.Count}" FontSize="34" FontWeight="SemiBold" />
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Style="{StaticResource MetricCardStyle}">
-                                        <StackPanel>
-                                            <TextBlock Text="Bookings" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
-                                            <TextBlock Text="{Binding Appointments.Count}" FontSize="34" FontWeight="SemiBold" />
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Style="{StaticResource MetricCardStyle}" Margin="0">
-                                        <StackPanel>
-                                            <TextBlock Text="Feedbacks" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
-                                            <TextBlock Text="{Binding Feedbacks.Count}" FontSize="34" FontWeight="SemiBold" />
-                                        </StackPanel>
-                                    </Border>
-                                </UniformGrid>
-                            </Grid>
+                                <StackPanel>
+                                    <TextBlock Text="Admin Dashboard" Style="{StaticResource SectionTitleTextStyle}" />
+                                    <UniformGrid Columns="5" Margin="0,0,0,18">
+                                        <Border Style="{StaticResource DarkMetricCardStyle}">
+                                            <StackPanel>
+                                                <TextBlock Text="Employees" Foreground="#B8DAD2" />
+                                                <TextBlock Text="{Binding Employees.Count}" FontSize="34" FontWeight="SemiBold" Foreground="#FDECC8" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Style="{StaticResource DarkMetricCardStyle}">
+                                            <StackPanel>
+                                                <TextBlock Text="Customers" Foreground="#B8DAD2" />
+                                                <TextBlock Text="{Binding Guests.Count}" FontSize="34" FontWeight="SemiBold" Foreground="#FDECC8" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Style="{StaticResource DarkMetricCardStyle}">
+                                            <StackPanel>
+                                                <TextBlock Text="Tables" Foreground="#B8DAD2" />
+                                                <TextBlock Text="{Binding Tables.Count}" FontSize="34" FontWeight="SemiBold" Foreground="#FDECC8" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Style="{StaticResource DarkMetricCardStyle}">
+                                            <StackPanel>
+                                                <TextBlock Text="Pending" Foreground="#B8DAD2" />
+                                                <TextBlock Text="{Binding PendingBookings.Count}" FontSize="34" FontWeight="SemiBold" Foreground="#FDECC8" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Style="{StaticResource DarkMetricCardStyle}" Margin="0">
+                                            <StackPanel>
+                                                <TextBlock Text="Feedbacks" Foreground="#B8DAD2" />
+                                                <TextBlock Text="{Binding Feedbacks.Count}" FontSize="34" FontWeight="SemiBold" Foreground="#FDECC8" />
+                                            </StackPanel>
+                                        </Border>
+                                    </UniformGrid>
 
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1.25*" />
+                                            <ColumnDefinition Width="1*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Background="#F8FAFC" CornerRadius="8" Padding="16" Margin="0,0,14,0">
+                                            <StackPanel>
+                                                <DockPanel Margin="0,0,0,10">
+                                                    <TextBlock Text="Pending bookings" Foreground="#111827" FontSize="17" FontWeight="SemiBold" />
+                                                    <Button DockPanel.Dock="Right" Content="Open" Command="{Binding NavigateCommand}" CommandParameter="Bookings" Width="80" Height="34" Background="{StaticResource RestaurantGoldBrush}" />
+                                                </DockPanel>
+                                                <DataGrid ItemsSource="{Binding PendingBookings}" SelectedItem="{Binding SelectedAppointment}" AutoGenerateColumns="False" IsReadOnly="True" Height="300">
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="Guest" Binding="{Binding Guest.Name}" Width="*" />
+                                                        <DataGridTextColumn Header="Table" Binding="{Binding Table.TableName}" Width="*" />
+                                                        <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="100" />
+                                                        <DataGridTextColumn Header="Time" Binding="{Binding StartTime}" Width="90" />
+                                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="90" />
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                                    <Button Content="Confirm" Command="{Binding ConfirmBookingCommand}" Width="110" Margin="0,0,8,0" />
+                                                    <Button Content="Cancel" Command="{Binding CancelBookingCommand}" Style="{StaticResource DangerButtonStyle}" Width="110" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Grid.Column="1" Background="#F8FAFC" CornerRadius="8" Padding="16">
+                                            <StackPanel>
+                                                <DockPanel Margin="0,0,0,10">
+                                                    <TextBlock Text="Table status" Foreground="#111827" FontSize="17" FontWeight="SemiBold" />
+                                                    <Button DockPanel.Dock="Right" Content="Refresh" Command="{Binding RefreshTableStatusCommand}" Style="{StaticResource SecondaryButtonStyle}" Width="92" Height="34" />
+                                                </DockPanel>
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                                    <DatePicker SelectedDate="{Binding SelectedDate}" Width="145" />
+                                                    <TextBox Text="{Binding StartTimeText}" Width="88" Margin="8,4,0,0" />
+                                                    <TextBox Text="{Binding EndTimeText}" Width="88" Margin="8,4,0,0" />
+                                                </StackPanel>
+                                                <DataGrid ItemsSource="{Binding TableStatuses}" AutoGenerateColumns="False" IsReadOnly="True" Height="300">
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="Table" Binding="{Binding TableName}" Width="*" />
+                                                        <DataGridCheckBoxColumn Header="Booked" Binding="{Binding IsBooked}" Width="80" />
+                                                        <DataGridTextColumn Header="Guest" Binding="{Binding GuestName}" Width="*" />
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
                             <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Employees}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="2*" />
@@ -327,21 +403,21 @@
                                         <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="80" />
                                     </DataGrid.Columns>
                                 </DataGrid>
-                                <StackPanel Grid.Column="1" Margin="18,0,0,0">
-                                    <TextBlock Text="Employee Form" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,12" />
-                                    <TextBlock Text="Username" />
+                                <StackPanel Grid.Column="1" Style="{StaticResource FormPanelStyle}">
+                                    <TextBlock Text="Employee Form" Style="{StaticResource SectionTitleTextStyle}" />
+                                    <TextBlock Text="Username" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding EmployeeUsername, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Password" Margin="0,10,0,0" />
+                                    <TextBlock Text="Password" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding EmployeePassword, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Identity" Margin="0,10,0,0" />
+                                    <TextBlock Text="Identity" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding EmployeeIdentityNumber, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Phone" Margin="0,10,0,0" />
+                                    <TextBlock Text="Phone" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding EmployeePhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Date of Birth" Margin="0,10,0,0" />
+                                    <TextBlock Text="Date of Birth" Style="{StaticResource FormLabelStyle}" />
                                     <DatePicker SelectedDate="{Binding EmployeeDateOfBirth}" />
-                                    <TextBlock Text="Gender" Margin="0,10,0,0" />
+                                    <TextBlock Text="Gender" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding EmployeeGender, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Role ID" Margin="0,10,0,0" />
+                                    <TextBlock Text="Role ID" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding EmployeeRoleId, UpdateSourceTrigger=PropertyChanged}" />
                                     <CheckBox Content="Active" IsChecked="{Binding EmployeeIsActive}" Margin="0,12,0,12" />
                                     <Button Content="Save" Command="{Binding SaveEmployeeCommand}" Margin="0,0,0,8" />
@@ -367,21 +443,21 @@
                                         <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="80" />
                                     </DataGrid.Columns>
                                 </DataGrid>
-                                <StackPanel Grid.Column="1" Margin="18,0,0,0">
-                                    <TextBlock Text="Customer Form" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,12" />
-                                    <TextBlock Text="Username" />
+                                <StackPanel Grid.Column="1" Style="{StaticResource FormPanelStyle}">
+                                    <TextBlock Text="Customer Form" Style="{StaticResource SectionTitleTextStyle}" />
+                                    <TextBlock Text="Username" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestUsername, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Password" Margin="0,10,0,0" />
+                                    <TextBlock Text="Password" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestPassword, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Name" Margin="0,10,0,0" />
+                                    <TextBlock Text="Name" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestName, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Phone" Margin="0,10,0,0" />
+                                    <TextBlock Text="Phone" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestPhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Identity" Margin="0,10,0,0" />
+                                    <TextBlock Text="Identity" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestIdentityNumber, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Date of Birth" Margin="0,10,0,0" />
+                                    <TextBlock Text="Date of Birth" Style="{StaticResource FormLabelStyle}" />
                                     <DatePicker SelectedDate="{Binding GuestDateOfBirth}" />
-                                    <TextBlock Text="Gender" Margin="0,10,0,0" />
+                                    <TextBlock Text="Gender" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestGender, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Content="Save" Command="{Binding SaveGuestCommand}" Margin="0,16,0,8" />
                                     <Button Content="New" Command="{Binding NewGuestCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
@@ -402,8 +478,9 @@
                                         <DataGridTextColumn Header="Table Name" Binding="{Binding TableName}" Width="*" />
                                     </DataGrid.Columns>
                                 </DataGrid>
-                                <StackPanel Grid.Column="1" Margin="18,0,0,0">
-                                    <TextBlock Text="Table Name" />
+                                <StackPanel Grid.Column="1" Style="{StaticResource FormPanelStyle}">
+                                    <TextBlock Text="Table Form" Style="{StaticResource SectionTitleTextStyle}" />
+                                    <TextBlock Text="Table Name" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding TableName, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Content="Save" Command="{Binding SaveTableCommand}" Margin="0,16,0,8" />
                                     <Button Content="New" Command="{Binding NewTableCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
@@ -412,23 +489,55 @@
                             </Grid>
 
                             <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Bookings}">
-                                <StackPanel>
-                                    <DataGrid ItemsSource="{Binding Appointments}" SelectedItem="{Binding SelectedAppointment}" AutoGenerateColumns="False" IsReadOnly="True" Height="420">
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Guest" Binding="{Binding Guest.Name}" Width="*" />
-                                            <DataGridTextColumn Header="Table" Binding="{Binding Table.TableName}" Width="*" />
-                                            <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="120" />
-                                            <DataGridTextColumn Header="Start" Binding="{Binding StartTime}" Width="100" />
-                                            <DataGridTextColumn Header="End" Binding="{Binding EndTime}" Width="100" />
-                                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
-                                        <Button Content="Confirm" Command="{Binding ConfirmBookingCommand}" Width="120" Margin="0,0,8,0" />
-                                        <Button Content="Cancel" Command="{Binding CancelBookingCommand}" Style="{StaticResource DangerButtonStyle}" Width="120" Margin="0,0,8,0" />
-                                        <Button Content="Complete" Command="{Binding CompleteBookingCommand}" Style="{StaticResource SecondaryButtonStyle}" Width="120" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="340" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Text="Booking queue" Style="{StaticResource SectionTitleTextStyle}" />
+                                        <DataGrid ItemsSource="{Binding Appointments}" SelectedItem="{Binding SelectedAppointment}" AutoGenerateColumns="False" IsReadOnly="True" Height="470">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Guest" Binding="{Binding Guest.Name}" Width="*" />
+                                                <DataGridTextColumn Header="Table" Binding="{Binding Table.TableName}" Width="*" />
+                                                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="110" />
+                                                <DataGridTextColumn Header="Start" Binding="{Binding StartTime}" Width="90" />
+                                                <DataGridTextColumn Header="End" Binding="{Binding EndTime}" Width="90" />
+                                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="105" />
+                                            </DataGrid.Columns>
+                                        </DataGrid>
                                     </StackPanel>
-                                </StackPanel>
+                                    <Border Grid.Column="1"
+                                            Background="#F8FAFC"
+                                            CornerRadius="8"
+                                            Padding="18"
+                                            Margin="18,0,0,0">
+                                        <StackPanel>
+                                            <TextBlock Text="Booking Detail" Foreground="#111827" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,14" />
+                                            <TextBlock Text="Guest" Style="{StaticResource FormLabelStyle}" />
+                                            <TextBlock Text="{Binding SelectedAppointment.Guest.Name}" Foreground="#111827" FontWeight="SemiBold" />
+                                            <TextBlock Text="Table" Style="{StaticResource FormLabelStyle}" />
+                                            <TextBlock Text="{Binding SelectedAppointment.Table.TableName}" Foreground="#111827" FontWeight="SemiBold" />
+                                            <TextBlock Text="Date" Style="{StaticResource FormLabelStyle}" />
+                                            <TextBlock Text="{Binding SelectedAppointment.Date, StringFormat=d}" Foreground="#111827" FontWeight="SemiBold" />
+                                            <TextBlock Text="Time" Style="{StaticResource FormLabelStyle}" />
+                                            <TextBlock Foreground="#111827" FontWeight="SemiBold">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                                        <Binding Path="SelectedAppointment.StartTime" />
+                                                        <Binding Path="SelectedAppointment.EndTime" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <TextBlock Text="Status" Style="{StaticResource FormLabelStyle}" />
+                                            <TextBlock Text="{Binding SelectedAppointment.Status}" Foreground="#B7791F" FontWeight="SemiBold" FontSize="18" />
+                                            <Border Height="1" Background="#E2E8F0" Margin="0,16,0,16" />
+                                            <Button Content="Confirm booking" Command="{Binding ConfirmBookingCommand}" Margin="0,0,0,8" />
+                                            <Button Content="Mark completed" Command="{Binding CompleteBookingCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
+                                            <Button Content="Cancel booking" Command="{Binding CancelBookingCommand}" Style="{StaticResource DangerButtonStyle}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
                             </Grid>
 
                             <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Feedbacks}">
@@ -456,16 +565,17 @@
                                         <DataGridTextColumn Header="Time" Binding="{Binding TimeRange}" Width="150" />
                                     </DataGrid.Columns>
                                 </DataGrid>
-                                <StackPanel Grid.Column="1" Margin="18,0,0,0">
-                                    <TextBlock Text="Date" />
+                                <StackPanel Grid.Column="1" Style="{StaticResource FormPanelStyle}">
+                                    <TextBlock Text="Booking Form" Style="{StaticResource SectionTitleTextStyle}" />
+                                    <TextBlock Text="Date" Style="{StaticResource FormLabelStyle}" />
                                     <DatePicker SelectedDate="{Binding SelectedDate}" />
-                                    <TextBlock Text="Start / End" Margin="0,10,0,0" />
+                                    <TextBlock Text="Start / End" Style="{StaticResource FormLabelStyle}" />
                                     <StackPanel Orientation="Horizontal">
                                         <TextBox Text="{Binding StartTimeText}" Width="110" />
                                         <TextBox Text="{Binding EndTimeText}" Width="110" Margin="8,0,0,0" />
                                     </StackPanel>
                                     <Button Content="Refresh Tables" Command="{Binding RefreshTableStatusCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,12,0,18" />
-                                    <TextBlock Text="Walk-in Guest" FontWeight="SemiBold" />
+                                    <TextBlock Text="Walk-in Guest" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding WalkInGuestName, UpdateSourceTrigger=PropertyChanged}" Margin="0,6,0,8" />
                                     <TextBox Text="{Binding WalkInGuestPhone, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Content="Book Selected Table" Command="{Binding CreateWalkInBookingCommand}" Margin="0,14,0,0" />
@@ -491,6 +601,95 @@
                                 </StackPanel>
                             </Grid>
 
+                            <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Menu}">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,18">
+                                        <StackPanel>
+                                            <TextBlock Text="Choose dishes first"
+                                                       Style="{StaticResource SectionTitleTextStyle}" />
+                                            <TextBlock Text="Select the dishes you want. After that, continue to choose table, date, and time."
+                                                       Foreground="#B8DAD2"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <Border DockPanel.Dock="Right"
+                                                Background="#123F37"
+                                                BorderBrush="#4D8577"
+                                                BorderThickness="1"
+                                                CornerRadius="8"
+                                                Padding="14,10"
+                                                Width="330">
+                                            <StackPanel>
+                                                <TextBlock Text="Selected dishes"
+                                                           Foreground="#FDECC8"
+                                                           FontWeight="SemiBold" />
+                                                <TextBlock Text="{Binding SelectedDishesText}"
+                                                           Foreground="#B8DAD2"
+                                                           TextWrapping="Wrap"
+                                                           Margin="0,6,0,0" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DockPanel>
+
+                                    <ItemsControl ItemsSource="{Binding Dishes}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Columns="5" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Style="{StaticResource FoodCardStyle}" MinHeight="190">
+                                                    <StackPanel>
+                                                        <Border Height="76"
+                                                                CornerRadius="6"
+                                                                ClipToBounds="True"
+                                                                Margin="0,0,0,12">
+                                                            <Border.Background>
+                                                                <ImageBrush ImageSource="Assets/restaurant-hero.png"
+                                                                            Stretch="UniformToFill"
+                                                                            Viewbox="0.28,0.40,0.44,0.40" />
+                                                            </Border.Background>
+                                                        </Border>
+                                                        <TextBlock Text="{Binding Category}"
+                                                                   Foreground="#F4C46D"
+                                                                   FontSize="12"
+                                                                   FontWeight="SemiBold" />
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   FontWeight="SemiBold"
+                                                                   TextWrapping="Wrap"
+                                                                   Margin="0,4,0,0" />
+                                                        <TextBlock Text="{Binding Description}"
+                                                                   Foreground="#B8DAD2"
+                                                                   FontSize="12"
+                                                                   TextWrapping="Wrap"
+                                                                   Height="42"
+                                                                   Margin="0,6,0,0" />
+                                                        <DockPanel Margin="0,10,0,0">
+                                                            <TextBlock Text="{Binding PriceText}"
+                                                                       Foreground="#FDECC8"
+                                                                       FontWeight="SemiBold"
+                                                                       VerticalAlignment="Center" />
+                                                            <CheckBox DockPanel.Dock="Right"
+                                                                      Content="Choose"
+                                                                      Foreground="#EAF7F3"
+                                                                      IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                      HorizontalAlignment="Right" />
+                                                        </DockPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <Button Content="Continue to booking"
+                                            Command="{Binding ContinueToBookingCommand}"
+                                            Background="{StaticResource RestaurantGoldBrush}"
+                                            Width="190"
+                                            HorizontalAlignment="Right"
+                                            Margin="0,20,0,0" />
+                                </StackPanel>
+                            </Grid>
+
                             <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Customer Booking}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="2*" />
@@ -503,8 +702,16 @@
                                         <DataGridTextColumn Header="Guest" Binding="{Binding GuestName}" Width="*" />
                                     </DataGrid.Columns>
                                 </DataGrid>
-                                <StackPanel Grid.Column="1" Margin="18,0,0,0">
+                                <StackPanel Grid.Column="1" Style="{StaticResource FormPanelStyle}">
+                                    <TextBlock Text="Booking Form" Style="{StaticResource SectionTitleTextStyle}" />
+                                    <TextBlock Text="Selected dishes" Style="{StaticResource FormLabelStyle}" />
+                                    <TextBlock Text="{Binding SelectedDishesText}"
+                                               Foreground="#B8DAD2"
+                                               TextWrapping="Wrap"
+                                               Margin="0,0,0,8" />
+                                    <TextBlock Text="Date" Style="{StaticResource FormLabelStyle}" />
                                     <DatePicker SelectedDate="{Binding SelectedDate}" />
+                                    <TextBlock Text="Start / End" Style="{StaticResource FormLabelStyle}" />
                                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                         <TextBox Text="{Binding StartTimeText}" Width="110" />
                                         <TextBox Text="{Binding EndTimeText}" Width="110" Margin="8,0,0,0" />
@@ -541,10 +748,11 @@
                                         <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
                                     </DataGrid.Columns>
                                 </DataGrid>
-                                <StackPanel Grid.Column="1" Margin="18,0,0,0">
-                                    <TextBlock Text="Rating 1-5" />
+                                <StackPanel Grid.Column="1" Style="{StaticResource FormPanelStyle}">
+                                    <TextBlock Text="Feedback Form" Style="{StaticResource SectionTitleTextStyle}" />
+                                    <TextBlock Text="Rating 1-5" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding FeedbackRating, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Content" Margin="0,10,0,0" />
+                                    <TextBlock Text="Content" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding FeedbackContent, UpdateSourceTrigger=PropertyChanged}" Height="120" TextWrapping="Wrap" AcceptsReturn="True" />
                                     <Button Content="Submit Feedback" Command="{Binding SubmitFeedbackCommand}" Margin="0,14,0,0" />
                                 </StackPanel>
@@ -552,15 +760,16 @@
 
                             <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Profile}">
                                 <StackPanel Width="420" HorizontalAlignment="Left">
-                                    <TextBlock Text="Name" />
+                                    <TextBlock Text="Profile Form" Style="{StaticResource SectionTitleTextStyle}" />
+                                    <TextBlock Text="Name" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestName, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Identity" Margin="0,10,0,0" />
+                                    <TextBlock Text="Identity" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestIdentityNumber, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Phone" Margin="0,10,0,0" />
+                                    <TextBlock Text="Phone" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestPhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="Date of Birth" Margin="0,10,0,0" />
+                                    <TextBlock Text="Date of Birth" Style="{StaticResource FormLabelStyle}" />
                                     <DatePicker SelectedDate="{Binding GuestDateOfBirth}" />
-                                    <TextBlock Text="Gender" Margin="0,10,0,0" />
+                                    <TextBlock Text="Gender" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding GuestGender, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Content="Save Profile" Command="{Binding SaveProfileCommand}" Margin="0,16,0,0" />
                                 </StackPanel>
@@ -568,9 +777,10 @@
 
                             <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Change Password}">
                                 <StackPanel Width="420" HorizontalAlignment="Left">
-                                    <TextBlock Text="Old Password" />
+                                    <TextBlock Text="Password Form" Style="{StaticResource SectionTitleTextStyle}" />
+                                    <TextBlock Text="Old Password" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding OldPassword, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Text="New Password" Margin="0,10,0,0" />
+                                    <TextBlock Text="New Password" Style="{StaticResource FormLabelStyle}" />
                                     <TextBox Text="{Binding NewPassword, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Content="Change Password" Command="{Binding ChangePasswordCommand}" Margin="0,16,0,0" />
                                 </StackPanel>

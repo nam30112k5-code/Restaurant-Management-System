@@ -1,6 +1,6 @@
-using Repositories;
+﻿using Repositories;
 
-namespace RestaurantManagement.Services;
+namespace Services;
 
 public class AccountService : IAccountService
 {

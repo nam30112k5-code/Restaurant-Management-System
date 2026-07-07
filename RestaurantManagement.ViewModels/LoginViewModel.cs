@@ -1,22 +1,22 @@
-using System.Windows.Input;
-using RestaurantManagement.Commands;
-using RestaurantManagement.Services;
+﻿using System.Windows.Input;
+using Commands;
+using Services;
 
-namespace RestaurantManagement.ViewModels;
+namespace ViewModels;
 
 public class LoginViewModel : ViewModelBase
 {
     private readonly IAccountService _accountService;
-    private readonly IUserSession _userSession;
+    private readonly IUserSession _session;
     private string _username = string.Empty;
     private string _password = string.Empty;
     private string? _errorMessage;
     private bool _isBusy;
 
-    public LoginViewModel(IAccountService accountService, IUserSession userSession)
+    public LoginViewModel(IAccountService accountService, IUserSession session)
     {
         _accountService = accountService;
-        _userSession = userSession;
+        _session = session;
         LoginCommand = new AsyncRelayCommand(LoginAsync, CanLogin);
     }
 
@@ -93,7 +93,7 @@ public class LoginViewModel : ViewModelBase
                 return;
             }
 
-            _userSession.SignIn(loginResult.UserAccount);
+            _session.SignIn(loginResult.UserAccount);
             Password = string.Empty;
             LoginSucceeded?.Invoke(this, loginResult.UserAccount);
         }
