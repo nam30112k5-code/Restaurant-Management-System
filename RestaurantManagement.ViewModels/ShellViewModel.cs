@@ -8,20 +8,20 @@ namespace RestaurantManagement.ViewModels;
 
 public class ShellViewModel : ViewModelBase
 {
-    private readonly IRestaurantService _restaurantService;
+    private readonly IRmsService _restaurantService;
     private readonly IUserSession _userSession;
     private string _selectedMenuItem = "Dashboard";
     private string? _message;
     private Employee? _selectedEmployee;
     private Guest? _selectedGuest;
-    private RestaurantTable? _selectedTable;
+    private Table? _selectedTable;
     private Appointment? _selectedAppointment;
     private Appointment? _selectedHistory;
     private DateTime _selectedDate = DateTime.Today;
     private string _startTimeText = "18:00";
     private string _endTimeText = "20:00";
 
-    public ShellViewModel(IRestaurantService restaurantService, IUserSession userSession)
+    public ShellViewModel(IRmsService restaurantService, IUserSession userSession)
     {
         _restaurantService = restaurantService;
         _userSession = userSession;
@@ -29,8 +29,8 @@ public class ShellViewModel : ViewModelBase
         MenuItems = new ObservableCollection<string>();
         Employees = new ObservableCollection<Employee>();
         Guests = new ObservableCollection<Guest>();
-        Tables = new ObservableCollection<RestaurantTable>();
-        TableStatuses = new ObservableCollection<TableStatusItem>();
+        Tables = new ObservableCollection<Table>();
+        TableStatuses = new ObservableCollection<TableStatus>();
         Appointments = new ObservableCollection<Appointment>();
         BookingHistory = new ObservableCollection<Appointment>();
         Feedbacks = new ObservableCollection<Feedback>();
@@ -41,6 +41,7 @@ public class ShellViewModel : ViewModelBase
         DeleteEmployeeCommand = new AsyncRelayCommand(DeleteEmployeeAsync);
         NewEmployeeCommand = new AsyncRelayCommand(NewEmployeeAsync);
         SaveGuestCommand = new AsyncRelayCommand(SaveGuestAsync);
+        NewGuestCommand = new AsyncRelayCommand(NewGuestAsync);
         ToggleGuestStatusCommand = new AsyncRelayCommand(ToggleGuestStatusAsync);
         DeleteGuestCommand = new AsyncRelayCommand(DeleteGuestAsync);
         ResetGuestPasswordCommand = new AsyncRelayCommand(ResetGuestPasswordAsync);
@@ -61,7 +62,7 @@ public class ShellViewModel : ViewModelBase
 
     public event EventHandler? LogoutRequested;
 
-    public AccountMember? CurrentAccount => _userSession.CurrentUser;
+    public UserAccount? CurrentAccount => _userSession.CurrentUser;
     public string WelcomeText => CurrentAccount is null ? "Welcome" : $"Welcome, {CurrentAccount.DisplayName}";
     public bool IsAdmin => CurrentAccount?.AccountType == AccountType.Employee && CurrentAccount.RoleId == RoleIds.Admin;
     public bool IsStaff => CurrentAccount?.AccountType == AccountType.Employee && CurrentAccount.RoleId == RoleIds.Staff;
@@ -70,8 +71,8 @@ public class ShellViewModel : ViewModelBase
     public ObservableCollection<string> MenuItems { get; }
     public ObservableCollection<Employee> Employees { get; }
     public ObservableCollection<Guest> Guests { get; }
-    public ObservableCollection<RestaurantTable> Tables { get; }
-    public ObservableCollection<TableStatusItem> TableStatuses { get; }
+    public ObservableCollection<Table> Tables { get; }
+    public ObservableCollection<TableStatus> TableStatuses { get; }
     public ObservableCollection<Appointment> Appointments { get; }
     public ObservableCollection<Appointment> BookingHistory { get; }
     public ObservableCollection<Feedback> Feedbacks { get; }
@@ -82,6 +83,7 @@ public class ShellViewModel : ViewModelBase
     public ICommand DeleteEmployeeCommand { get; }
     public ICommand NewEmployeeCommand { get; }
     public ICommand SaveGuestCommand { get; }
+    public ICommand NewGuestCommand { get; }
     public ICommand ToggleGuestStatusCommand { get; }
     public ICommand DeleteGuestCommand { get; }
     public ICommand ResetGuestPasswordCommand { get; }
@@ -143,6 +145,7 @@ public class ShellViewModel : ViewModelBase
                 if (value is not null)
                 {
                     GuestUsername = value.Username;
+                    GuestPassword = string.Empty;
                     GuestName = value.Name;
                     GuestIdentityNumber = value.IdentityNumber;
                     GuestPhoneNumber = value.PhoneNumber;
@@ -154,7 +157,7 @@ public class ShellViewModel : ViewModelBase
         }
     }
 
-    public RestaurantTable? SelectedTable
+    public Table? SelectedTable
     {
         get => _selectedTable;
         set
@@ -301,6 +304,8 @@ public class ShellViewModel : ViewModelBase
     private async Task LoadDashboardAsync()
     {
         Employees.ReplaceWith(await _restaurantService.GetEmployeesAsync());
+        Guests.ReplaceWith(await _restaurantService.GetGuestsAsync());
+        Tables.ReplaceWith(await _restaurantService.GetTablesAsync());
         Appointments.ReplaceWith(await _restaurantService.GetAppointmentsAsync());
         Feedbacks.ReplaceWith(await _restaurantService.GetFeedbacksAsync());
     }
@@ -389,6 +394,7 @@ public class ShellViewModel : ViewModelBase
         {
             var guest = new Guest
             {
+                GuestId = SelectedGuest?.GuestId ?? 0,
                 Username = GuestUsername,
                 Name = GuestName,
                 IdentityNumber = GuestIdentityNumber,
@@ -396,10 +402,34 @@ public class ShellViewModel : ViewModelBase
                 DateOfBirth = GuestDateOfBirth,
                 Gender = GuestGender
             };
-            await _restaurantService.AddGuestAsync(guest, GuestPassword);
+
+            if (guest.GuestId == 0)
+            {
+                await _restaurantService.AddGuestAsync(guest, GuestPassword);
+                Message = "Created customer successfully.";
+            }
+            else
+            {
+                await _restaurantService.UpdateGuestAsync(guest);
+                Message = "Updated customer successfully.";
+            }
+
             await LoadGuestsAsync();
-            Message = "Created customer successfully.";
         });
+    }
+
+    private async Task NewGuestAsync()
+    {
+        SelectedGuest = null;
+        GuestUsername = string.Empty;
+        GuestPassword = "123";
+        GuestName = string.Empty;
+        GuestIdentityNumber = null;
+        GuestPhoneNumber = null;
+        GuestDateOfBirth = new DateTime(2000, 1, 1);
+        GuestGender = "male";
+        RaiseGuestProperties();
+        await Task.CompletedTask;
     }
 
     private async Task ToggleGuestStatusAsync()
@@ -617,6 +647,12 @@ public class ShellViewModel : ViewModelBase
 
         await RunSafeAsync(async () =>
         {
+            if (SelectedHistory.Status == "completed" || SelectedHistory.Status == "cancelled")
+            {
+                Message = "Only pending or confirmed bookings can be cancelled.";
+                return;
+            }
+
             await _restaurantService.CancelBookingAsync(SelectedHistory.AppointmentId);
             await LoadBookingHistoryAsync();
             Message = "Booking cancelled successfully.";

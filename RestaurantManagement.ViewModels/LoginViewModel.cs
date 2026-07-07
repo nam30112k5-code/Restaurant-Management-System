@@ -20,7 +20,7 @@ public class LoginViewModel : ViewModelBase
         LoginCommand = new AsyncRelayCommand(LoginAsync, CanLogin);
     }
 
-    public event EventHandler<AccountMember>? LoginSucceeded;
+    public event EventHandler<UserAccount>? LoginSucceeded;
 
     public string Username
     {
@@ -87,15 +87,15 @@ public class LoginViewModel : ViewModelBase
             }
 
             var loginResult = await _accountService.LoginAsync(Username, Password);
-            if (!loginResult.IsSuccess || loginResult.AccountMember is null)
+            if (!loginResult.IsSuccess || loginResult.UserAccount is null)
             {
                 ErrorMessage = loginResult.ErrorMessage;
                 return;
             }
 
-            _userSession.SignIn(loginResult.AccountMember);
+            _userSession.SignIn(loginResult.UserAccount);
             Password = string.Empty;
-            LoginSucceeded?.Invoke(this, loginResult.AccountMember);
+            LoginSucceeded?.Invoke(this, loginResult.UserAccount);
         }
         catch (Exception)
         {
@@ -119,14 +119,14 @@ public class LoginViewModel : ViewModelBase
             return "Please enter password.";
         }
 
-        if (Username.Trim().Length > LoginValidationRules.MaxUsernameLength)
+        if (Username.Trim().Length > LoginRules.MaxUsernameLength)
         {
-            return $"Username cannot exceed {LoginValidationRules.MaxUsernameLength} characters.";
+            return $"Username cannot exceed {LoginRules.MaxUsernameLength} characters.";
         }
 
-        if (Password.Length > LoginValidationRules.MaxPasswordLength)
+        if (Password.Length > LoginRules.MaxPasswordLength)
         {
-            return $"Password cannot exceed {LoginValidationRules.MaxPasswordLength} characters.";
+            return $"Password cannot exceed {LoginRules.MaxPasswordLength} characters.";
         }
 
         return null;

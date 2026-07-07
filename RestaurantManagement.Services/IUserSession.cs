@@ -2,8 +2,8 @@ namespace RestaurantManagement.Services;
 
 public interface IUserSession
 {
-    AccountMember? CurrentUser { get; }
+    UserAccount? CurrentUser { get; }
     bool IsAuthenticated { get; }
-    void SignIn(AccountMember accountMember);
+    void SignIn(UserAccount accountMember);
     void SignOut();
 }

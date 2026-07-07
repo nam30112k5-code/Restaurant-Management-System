@@ -15,7 +15,7 @@ The system helps optimize and improve the reservation management process for res
 
 To configure the database connection for testing the application, follow the steps below:
 
-1. Run the **`FINAL_ASSIGNMENT_PRJ301.sql`** file to create the database and required tables.
+1. Run the **`RestaurantManagement.sql`** file to create the database and required tables.
 2. Open the project using **NetBeans**.
 3. Navigate to:
    **Web Pages / WEB-INF / `ConnectDB.properties`**
@@ -31,7 +31,7 @@ No additional configuration is required.
 
 Để thiết lập kết nối cơ sở dữ liệu và chạy thử chương trình, vui lòng thực hiện:
 
-1. Chạy file **`FINAL_ASSIGNMENT_PRJ301.sql`** để tạo database và các bảng cần thiết.
+1. Chạy file **`RestaurantManagement.sql`** để tạo database và các bảng cần thiết.
 2. Mở project bằng **NetBeans**.
 3. Truy cập:
    **Web Pages / WEB-INF / `ConnectDB.properties`**

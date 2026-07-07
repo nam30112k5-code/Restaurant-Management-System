@@ -2,7 +2,7 @@ using RestaurantManagement.Models;
 
 namespace RestaurantManagement.Services;
 
-public interface IRestaurantService
+public interface IRmsService
 {
     Task<List<Employee>> GetEmployeesAsync();
     Task<Employee?> GetEmployeeByIdAsync(int employeeId);
@@ -13,15 +13,16 @@ public interface IRestaurantService
     Task<List<Guest>> GetGuestsAsync();
     Task<Guest?> GetGuestByIdAsync(int guestId);
     Task AddGuestAsync(Guest guest, string password);
+    Task UpdateGuestAsync(Guest guest);
     Task SetGuestStatusAsync(int guestId, bool isActive);
     Task ResetGuestPasswordAsync(int guestId, string newPassword);
     Task DeleteGuestAsync(int guestId);
 
-    Task<List<RestaurantTable>> GetTablesAsync();
+    Task<List<Table>> GetTablesAsync();
     Task AddTableAsync(string tableName);
-    Task UpdateTableAsync(RestaurantTable table);
+    Task UpdateTableAsync(Table table);
     Task DeleteTableAsync(int tableId);
-    Task<List<TableStatusItem>> GetTableStatusAsync(DateTime date, TimeSpan startTime, TimeSpan endTime);
+    Task<List<TableStatus>> GetTableStatusAsync(DateTime date, TimeSpan startTime, TimeSpan endTime);
 
     Task<List<Appointment>> GetAppointmentsAsync();
     Task<List<Appointment>> GetBookingHistoryAsync(int guestId);
@@ -34,6 +35,6 @@ public interface IRestaurantService
     Task<List<Feedback>> GetFeedbacksAsync();
     Task AddFeedbackAsync(int guestId, Guid appointmentId, string content, int rating);
 
-    Task UpdateProfileAsync(AccountMember accountMember, string? name, string? identityNumber, string? phoneNumber, DateTime? dateOfBirth, string? gender);
-    Task<bool> ChangePasswordAsync(AccountMember accountMember, string oldPassword, string newPassword);
+    Task UpdateProfileAsync(UserAccount accountMember, string? name, string? identityNumber, string? phoneNumber, DateTime? dateOfBirth, string? gender);
+    Task<bool> ChangePasswordAsync(UserAccount accountMember, string oldPassword, string newPassword);
 }

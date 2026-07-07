@@ -23,7 +23,7 @@ public class MainViewModel : ViewModelBase
         private set => SetProperty(ref _currentViewModel, value);
     }
 
-    private async void OnLoginSucceeded(object? sender, AccountMember accountMember)
+    private async void OnLoginSucceeded(object? sender, UserAccount accountMember)
     {
         await _shellViewModel.InitializeAsync();
         CurrentViewModel = _shellViewModel;

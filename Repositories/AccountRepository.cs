@@ -6,9 +6,9 @@ namespace Repositories;
 
 public class AccountRepository : IAccountRepository
 {
-    private readonly RestaurantDbContext _dbContext;
+    private readonly AppDb _dbContext;
 
-    public AccountRepository(RestaurantDbContext dbContext)
+    public AccountRepository(AppDb dbContext)
     {
         _dbContext = dbContext;
     }

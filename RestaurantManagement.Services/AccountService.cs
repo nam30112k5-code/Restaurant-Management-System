@@ -13,28 +13,28 @@ public class AccountService : IAccountService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<AuthenticationResult> LoginAsync(
+    public async Task<AuthResult> LoginAsync(
         string username,
         string password,
         CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            return AuthenticationResult.Failure("Please enter both username and password.");
+            return AuthResult.Failure("Please enter both username and password.");
         }
 
         var trimmedUsername = username.Trim();
-        if (trimmedUsername.Length > LoginValidationRules.MaxUsernameLength ||
-            password.Length > LoginValidationRules.MaxPasswordLength)
+        if (trimmedUsername.Length > LoginRules.MaxUsernameLength ||
+            password.Length > LoginRules.MaxPasswordLength)
         {
-            return AuthenticationResult.Failure("Username or password is too long.");
+            return AuthResult.Failure("Username or password is too long.");
         }
 
         var employee = await _accountRepository.GetActiveEmployeeByUsernameAsync(trimmedUsername, cancellationToken);
 
         if (employee is not null && _passwordHasher.Verify(password, employee.Password))
         {
-            return AuthenticationResult.Success(new AccountMember(
+            return AuthResult.Success(new UserAccount(
                 employee.EmployeeId,
                 employee.Username,
                 AccountType.Employee,
@@ -46,7 +46,7 @@ public class AccountService : IAccountService
 
         if (guest is not null && _passwordHasher.Verify(password, guest.Password))
         {
-            return AuthenticationResult.Success(new AccountMember(
+            return AuthResult.Success(new UserAccount(
                 guest.GuestId,
                 guest.Username ?? string.Empty,
                 AccountType.Guest,
@@ -54,6 +54,6 @@ public class AccountService : IAccountService
                 string.IsNullOrWhiteSpace(guest.Name) ? guest.Username ?? "Guest" : guest.Name));
         }
 
-        return AuthenticationResult.Failure("Invalid username or password.");
+        return AuthResult.Failure("Invalid username or password.");
     }
 }

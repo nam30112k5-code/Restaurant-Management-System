@@ -1,6 +1,6 @@
 namespace RestaurantManagement.Services;
 
-public class TableStatusItem
+public class TableStatus
 {
     public int TableId { get; set; }
     public string TableName { get; set; } = string.Empty;

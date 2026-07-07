@@ -16,8 +16,8 @@
         Background="{StaticResource PageBackgroundBrush}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <local:LoginButtonContentConverter x:Key="LoginButtonContentConverter" />
-        <local:StringEqualsToVisibilityConverter x:Key="SectionVisibilityConverter" />
+        <local:LoginTextConverter x:Key="LoginTextConverter" />
+        <local:MatchVisibilityConverter x:Key="SectionVisibilityConverter" />
 
         <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
             <Grid Background="{StaticResource PageBackgroundBrush}">
@@ -127,7 +127,7 @@
                                        Foreground="{StaticResource MutedTextBrush}"
                                        FontWeight="SemiBold"
                                        Margin="0,0,0,6" />
-                            <PasswordBox helpers:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <PasswordBox helpers:PasswordHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Margin="0,0,0,18" />
 
                             <Border Background="#FFF0EC"
@@ -154,7 +154,7 @@
                                            TextWrapping="Wrap" />
                             </Border>
 
-                            <Button Content="{Binding IsBusy, Converter={StaticResource LoginButtonContentConverter}}"
+                            <Button Content="{Binding IsBusy, Converter={StaticResource LoginTextConverter}}"
                                     IsDefault="True"
                                     Command="{Binding LoginCommand}" />
 
@@ -276,11 +276,23 @@
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <Grid>
                             <Grid Visibility="{Binding SelectedMenuItem, Converter={StaticResource SectionVisibilityConverter}, ConverterParameter=Dashboard}">
-                                <UniformGrid Columns="3">
+                                <UniformGrid Columns="5">
                                     <Border Style="{StaticResource MetricCardStyle}">
                                         <StackPanel>
                                             <TextBlock Text="Employees" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
                                             <TextBlock Text="{Binding Employees.Count}" FontSize="34" FontWeight="SemiBold" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource MetricCardStyle}">
+                                        <StackPanel>
+                                            <TextBlock Text="Customers" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
+                                            <TextBlock Text="{Binding Guests.Count}" FontSize="34" FontWeight="SemiBold" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource MetricCardStyle}">
+                                        <StackPanel>
+                                            <TextBlock Text="Tables" FontSize="16" Foreground="{StaticResource MutedTextBrush}" />
+                                            <TextBlock Text="{Binding Tables.Count}" FontSize="34" FontWeight="SemiBold" />
                                         </StackPanel>
                                     </Border>
                                     <Border Style="{StaticResource MetricCardStyle}">
@@ -325,6 +337,10 @@
                                     <TextBox Text="{Binding EmployeeIdentityNumber, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Text="Phone" Margin="0,10,0,0" />
                                     <TextBox Text="{Binding EmployeePhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Text="Date of Birth" Margin="0,10,0,0" />
+                                    <DatePicker SelectedDate="{Binding EmployeeDateOfBirth}" />
+                                    <TextBlock Text="Gender" Margin="0,10,0,0" />
+                                    <TextBox Text="{Binding EmployeeGender, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Text="Role ID" Margin="0,10,0,0" />
                                     <TextBox Text="{Binding EmployeeRoleId, UpdateSourceTrigger=PropertyChanged}" />
                                     <CheckBox Content="Active" IsChecked="{Binding EmployeeIsActive}" Margin="0,12,0,12" />
@@ -361,7 +377,14 @@
                                     <TextBox Text="{Binding GuestName, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Text="Phone" Margin="0,10,0,0" />
                                     <TextBox Text="{Binding GuestPhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
-                                    <Button Content="Create" Command="{Binding SaveGuestCommand}" Margin="0,16,0,8" />
+                                    <TextBlock Text="Identity" Margin="0,10,0,0" />
+                                    <TextBox Text="{Binding GuestIdentityNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Text="Date of Birth" Margin="0,10,0,0" />
+                                    <DatePicker SelectedDate="{Binding GuestDateOfBirth}" />
+                                    <TextBlock Text="Gender" Margin="0,10,0,0" />
+                                    <TextBox Text="{Binding GuestGender, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button Content="Save" Command="{Binding SaveGuestCommand}" Margin="0,16,0,8" />
+                                    <Button Content="New" Command="{Binding NewGuestCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
                                     <Button Content="Block / Active" Command="{Binding ToggleGuestStatusCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
                                     <Button Content="Reset Password" Command="{Binding ResetGuestPasswordCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,0,8" />
                                     <Button Content="Delete" Command="{Binding DeleteGuestCommand}" Style="{StaticResource DangerButtonStyle}" />
@@ -535,6 +558,8 @@
                                     <TextBox Text="{Binding GuestIdentityNumber, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBlock Text="Phone" Margin="0,10,0,0" />
                                     <TextBox Text="{Binding GuestPhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Text="Date of Birth" Margin="0,10,0,0" />
+                                    <DatePicker SelectedDate="{Binding GuestDateOfBirth}" />
                                     <TextBlock Text="Gender" Margin="0,10,0,0" />
                                     <TextBox Text="{Binding GuestGender, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Content="Save Profile" Command="{Binding SaveProfileCommand}" Margin="0,16,0,0" />

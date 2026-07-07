@@ -3,17 +3,17 @@ using System.Windows.Controls;
 
 namespace RestaurantManagement.Helpers;
 
-public static class PasswordBoxHelper
+public static class PasswordHelper
 {
     public static readonly DependencyProperty BoundPasswordProperty =
         DependencyProperty.RegisterAttached(
             "BoundPassword",
             typeof(string),
-            typeof(PasswordBoxHelper),
+            typeof(PasswordHelper),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnBoundPasswordChanged));
 
     private static readonly DependencyProperty IsUpdatingProperty =
-        DependencyProperty.RegisterAttached("IsUpdating", typeof(bool), typeof(PasswordBoxHelper));
+        DependencyProperty.RegisterAttached("IsUpdating", typeof(bool), typeof(PasswordHelper));
 
     public static string GetBoundPassword(DependencyObject dependencyObject)
         => (string?)dependencyObject.GetValue(BoundPasswordProperty) ?? string.Empty;

@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 namespace RestaurantManagement.UI;
 
-public class LoginButtonContentConverter : IValueConverter
+public class LoginTextConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         => value is true ? "Signing in..." : "Sign in";

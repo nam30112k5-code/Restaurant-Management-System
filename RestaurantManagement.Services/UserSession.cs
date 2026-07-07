@@ -2,10 +2,10 @@ namespace RestaurantManagement.Services;
 
 public class UserSession : IUserSession
 {
-    public AccountMember? CurrentUser { get; private set; }
+    public UserAccount? CurrentUser { get; private set; }
     public bool IsAuthenticated => CurrentUser is not null;
 
-    public void SignIn(AccountMember accountMember)
+    public void SignIn(UserAccount accountMember)
     {
         ArgumentNullException.ThrowIfNull(accountMember);
         CurrentUser = accountMember;

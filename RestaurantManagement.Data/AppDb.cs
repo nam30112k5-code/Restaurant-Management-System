@@ -5,13 +5,13 @@ using System.IO;
 
 namespace RestaurantManagement.Data;
 
-public partial class RestaurantDbContext : DbContext
+public partial class AppDb : DbContext
 {
-    public RestaurantDbContext()
+    public AppDb()
     {
     }
 
-    public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options)
+    public AppDb(DbContextOptions<AppDb> options)
         : base(options)
     {
     }
@@ -19,7 +19,7 @@ public partial class RestaurantDbContext : DbContext
     public DbSet<Employee> Employees => Set<Employee>();
     public DbSet<Guest> Guests => Set<Guest>();
     public DbSet<Role> Roles => Set<Role>();
-    public DbSet<RestaurantTable> RestaurantTables => Set<RestaurantTable>();
+    public DbSet<Table> Tables => Set<Table>();
     public DbSet<Appointment> Appointments => Set<Appointment>();
     public DbSet<Feedback> Feedbacks => Set<Feedback>();
 
@@ -88,7 +88,7 @@ public partial class RestaurantDbContext : DbContext
             entity.Property(guest => guest.IsActive).HasColumnName("isActive");
         });
 
-        modelBuilder.Entity<RestaurantTable>(entity =>
+        modelBuilder.Entity<Table>(entity =>
         {
             entity.ToTable("Tables");
             entity.HasKey(table => table.TableId);

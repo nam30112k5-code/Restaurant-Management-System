@@ -6,7 +6,7 @@ public enum AccountType
     Guest
 }
 
-public sealed record AccountMember(
+public sealed record UserAccount(
     int Id,
     string Username,
     AccountType AccountType,

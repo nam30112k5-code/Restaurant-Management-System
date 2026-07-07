@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace RestaurantManagement.UI;
 
-public class StringEqualsToVisibilityConverter : IValueConverter
+public class MatchVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         => string.Equals(value?.ToString(), parameter?.ToString(), StringComparison.OrdinalIgnoreCase)

@@ -1,6 +1,6 @@
 namespace RestaurantManagement.Services;
 
-public class BCryptPasswordHasher : IPasswordHasher
+public class PasswordHasher : IPasswordHasher
 {
     public string Hash(string password)
         => BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);

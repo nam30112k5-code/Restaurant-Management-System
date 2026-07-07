@@ -23,14 +23,14 @@ public partial class App : Application
             })
             .ConfigureServices((context, services) =>
             {
-                services.AddDbContext<RestaurantDbContext>(options =>
+                services.AddDbContext<AppDb>(options =>
                     options.UseSqlServer(context.Configuration.GetConnectionString("RestaurantDatabase")));
 
                 services.AddScoped<IAccountRepository, AccountRepository>();
                 services.AddSingleton<IUserSession, UserSession>();
-                services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
+                services.AddSingleton<IPasswordHasher, PasswordHasher>();
                 services.AddScoped<IAccountService, AccountService>();
-                services.AddScoped<IRestaurantService, RestaurantService>();
+                services.AddScoped<IRmsService, RmsService>();
                 services.AddTransient<LoginViewModel>();
                 services.AddTransient<ShellViewModel>();
                 services.AddTransient<MainViewModel>();

@@ -12,6 +12,6 @@ public class Appointment
     public string? Status { get; set; }
 
     public Guest? Guest { get; set; }
-    public RestaurantTable? Table { get; set; }
+    public Table? Table { get; set; }
     public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 }

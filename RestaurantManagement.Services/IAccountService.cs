@@ -2,5 +2,5 @@ namespace RestaurantManagement.Services;
 
 public interface IAccountService
 {
-    Task<AuthenticationResult> LoginAsync(string username, string password, CancellationToken cancellationToken = default);
+    Task<AuthResult> LoginAsync(string username, string password, CancellationToken cancellationToken = default);
 }
