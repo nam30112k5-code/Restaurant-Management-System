@@ -1,3 +1,4 @@
+## Visual Studio build and temporary files
 .vs/
 bin/
 obj/
@@ -5,6 +6,10 @@ obj/
 **/obj/
 *.user
 *.suo
+*.userosscache
+*.sln.docstates
+[Bb]in/
+[Oo]bj/
 *.cache
 *.log
 TestResults/
